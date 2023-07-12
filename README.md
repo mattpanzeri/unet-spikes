@@ -51,20 +51,7 @@ How does it look? Based on the graphs, do you think that the network is learning
 
 2. Add visualization for the model outputs and the model targets. The model is trained on spike data, but because this is simulation data, we have access to the underlying rates. Log the following information to Tensorboard: `preds`, `target`, `the_mask` and `rates`. It's sufficient to log the last examplar from the last training batch. Use functions such as `logger.add_image` or `logger.add_figure` to log images and figures to Tensorboard in `train.py`. How do they look? Hint: a good place to write this code between the train loop and the validate loop in `train.py`. 
 
-<details>
-  <summary>Hint if you're stuck</summary>
-  Calling tensorboard's `log_image` function allows you to write an image. Try adding this line after the train loop:
 
-  ```
-  logger.add_image('debug/preds', preds[-1], total_epoch, dataformats='HW')
-  ```
-
-  dataformats='HW' is necessary because each prediction has the shape of an image that is Height x Width, and there is only one such prediction, hence there is no "channel" dimension. 
-
-  Do the same for `target`, `the_mask` and `rates`.
-  ```
-  
-</details>
 
 
 3. One big issue with the model is that it can give negative rates. This is a problem because rates are inherently positive. Add a nonlinearity to the model to ensure that the rates are positive. Look inside the CNN module (`src/cnn.py`) and add a nonlinearity to the output of the last layer. You can use `torch.nn.ReLU` or `torch.nn.Softplus` for this. How does this change the training? How does this change the predictions? How does this change the validation R2?
